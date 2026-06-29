@@ -35,7 +35,7 @@ const PORT = process.env.PORT || 8050;
 // Serve static files from the React app
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get("/", (request, response) => {
     // server to client
@@ -55,7 +55,7 @@ app.use('/api/order', orderRouter);
 
 // The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
 connectDB().then(() => {

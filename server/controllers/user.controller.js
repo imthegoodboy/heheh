@@ -58,7 +58,12 @@ export async function registerUserController(request,response){
             message : "User register successfully",
             error : false,
             success : true,
-            data : save
+            data : {
+                _id : save._id,
+                name : save.name,
+                email : save.email,
+                verify_email : save.verify_email
+            }
         })
 
     } catch (error) {
@@ -97,7 +102,7 @@ export async function verifyEmailController(request,response){
         return response.status(500).json({
             message : error.message || error,
             error : true,
-            success : true
+            success : false
         })
     }
 }
@@ -421,7 +426,7 @@ export async function resetpassword(request,response){
         const salt = await bcryptjs.genSalt(10)
         const hashPassword = await bcryptjs.hash(newPassword,salt)
 
-        const update = await UserModel.findOneAndUpdate(user._id,{
+        const update = await UserModel.findByIdAndUpdate(user._id,{
             password : hashPassword
         })
 
@@ -463,7 +468,7 @@ export async function refreshToken(request,response){
             })
         }
 
-        const userId = verifyToken?._id
+        const userId = verifyToken?.id
        
 
         const newAccessToken = await generatedAccessToken(userId)
